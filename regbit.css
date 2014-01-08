@@ -1,0 +1,137 @@
+
+h2 {
+	color: steelblue;
+	font-family: Tahoma, "Lucinda Grande", Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+
+table {
+	text-align: center;
+	border-collapse: collapse;
+	font-family: Tahoma, "Lucida Grande", Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+}
+
+table td,
+table th {
+	font-weight: normal;
+	vertical-align: top;
+	padding-left: 4px;
+	padding-right: 4px;
+	border: 1px solid black;
+}
+
+table p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+table p:first-child,
+table p:last-child {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+table caption {
+	font-weight: bold;
+}
+
+table tr td:first-child,
+table tr th:first-child,
+table tr td:last-child,
+table tr th:last-child {
+	border-left: none;
+	border-right: none;
+}
+
+table.regtable {
+	width: 525px;
+}
+
+table.regtable tbody code {
+	font-family: Tahoma, "Lucinda Grande", Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+
+li.log {
+	font-size: 75%;
+	font-family: "New Courier", "Courier", serif;
+}
+
+table.regtable tr td:nth-child(2) {
+	text-align: left;
+}
+
+.regBitNum {
+	text-anchor: middle;
+	fill: green;
+	font-family: Tahoma, "Lucinda Grande", Arial, Helvetica, sans-serif;
+	font-size: 6pt;
+}
+
+.regBitNumLine {
+	stroke: green;
+	stroke-width: 1px;
+}
+
+.regFieldBox {
+	fill: lightsteelblue;
+	stroke: black;
+	stroke-width: 1px;
+}
+
+.regFieldBoxrsvdz,
+.regFieldBoxrsvdp {
+	fill: lightgrey;
+}
+
+.regFieldBoxInternal {
+	stroke: steelblue;
+}
+
+.regFieldBoxInternalrsvdp,
+.regFieldBoxInternalrsvdz {
+	stroke: grey;
+}
+
+.regFieldNameInternal {
+	text-anchor: middle;
+}
+
+.regFieldNameInternalrsvdp,
+.regFieldNameInternalrsvdz {
+	fill: grey;
+}
+
+.regFieldName {
+	font-size: 9pt;
+	font-family: Tahoma, "Lucinda Grande", Arial, Helvetica, sans-serif;
+}
+
+.regBitBracket1 {
+	fill: none;
+	stroke: black;
+	stroke-width: 1px;
+}
+
+.regBitBracket0 {
+	fill: none;
+	stroke: steelblue;
+	stroke-width: 1.5px;
+}
+
+svg.regpict {
+	color: green;
+}
+
+svg\:svg {
+	display: none;
+}
+
+.svg_error {
+	color: red;
+	font-weight: bold;
+}
+
+
+
