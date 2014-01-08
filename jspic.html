@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>JSpic Grammar</title>
+    <style>
+        body {
+        	background-color: hsl(30, 20%, 95%);
+        }
+        h1 {
+        	font-family: sans-serif;
+        	font-size: 1em;
+        }
+        div svg.railroad-diagram {
+        	width: 80%;  /* Scale to the width of the parent */
+        	height: 100%;  /* Preserve the ratio. Could be related to https://bugs.webkit.org/show_bug.cgi?id=82489 */
+        }
+    </style>
+    <link rel='stylesheet' href='railroad-diagrams.css'>
+    <script src='railroad-diagrams.js'></script>
+</head>
+
+<body>
+    <section id="diagram">
+        <h1>diagram</h1>
+        <script>
+            Diagram(Choice(0, "javascript var", NonTerminal("group")),
+                    OneOrMore(Choice(0,
+                                     Sequence(Choice(0,
+                                                     Sequence(".max", "(", ".min",
+                                                     ".size", ".scale", ".render")),
+                                              "(",
+                                              Choice(0,Skip(),
+                                                     Sequence(Choice(0, "height", "x-scale"), ",",
+                                                              Choice(0, "width", "y-scale")),
+                                                    "xy-size", "xy-scale"), ")")
+                                     ))
+                   ).addTo();
+        </script>
+    </section>
+
+    <section id="group">
+        <h1>group</h1>
+        <script>
+            Diagram(Choice(0,
+                           Sequence("$.jspic", "(", Choice(0, Skip(),
+                                                           NonTerminal("label-string")),
+                                    ")")),
+                    Choice(0,Skip(), OneOrMore(NonTerminal("attr"))),
+                    Choice(0,Skip(), OneOrMore(NonTerminal("draw")))).addTo();
+        </script>
+    </section>
+
+    <section id="label_string">
+        <h1>label-string</h1>
+        <script>
+            Diagram(Choice(0, '"string"',
+                          Sequence("[", OneOrMore('"string"', ","), "]"))).addTo();
+        </script>
+    </section>
+
+    <section id="attr">
+        <h1>attr</h1>
+        <script>
+            Diagram(Choice(0,
+                           Sequence(".attr"," (", NonTerminal("attr-arg"), ")"),
+                           Sequence(".label", "(", NonTerminal("label-string"), ")"),
+                           Sequence(Choice(1, ".left", ".right", ".center"), "(",
+                                    OneOrMore("<<string>>", ","), ")"),
+                           Sequence(".point", "(",
+                                    NonTerminal("label-string"),
+                                    ")",
+                                    Choice(0, Skip(), NonTerminal("compass")),
+                                    Choice(0, Skip(), OneOrMore(NonTerminal("adjustment"))))
+                   )).addTo();
+        </script>
+    </section>
+
+    <section id="attr_arg">
+        <h1>attr-arg</h1>
+        <script>
+            Diagram(Choice(0,Skip(),
+                           OneOrMore(Choice(0,
+                                            Sequence(NonTerminal("attr-name"), ',',
+                                                     NonTerminal("attr-value")),
+                                                     NonTerminal('attr-JSON-object')),
+                                                   ','))).addTo();
+        </script>
+    </section>
+
+    <section id="draw">
+        <h1>draw</h1>
+
+        <script>
+            Diagram(NonTerminal("draw-object"),
+                    Choice(0,Skip(),OneOrMore(NonTerminal("attr"))),
+                    Choice(0,Skip(),
+                           NonTerminal("with"),
+                           NonTerminal("at"),
+                           NonTerminal("from"),
+                           NonTerminal("to"),
+                           Sequence(NonTerminal("with"), NonTerminal("at")),
+                           Sequence(NonTerminal("at"),   NonTerminal("with")),
+                           Sequence(NonTerminal("from"), NonTerminal("to")),
+                           Sequence(NonTerminal("to"),   NonTerminal("from"))
+                          )).addTo();
+        </script>
+    </section>
+
+    <section id="draw_object">
+        <h1>draw-object</h1>
+        <script>
+            Diagram(Choice(0,
+                           ".move", ".box",
+                           ".circle", ".ellipse",
+                           ".line", ".arrow",
+                           ".text", ".group"),
+                    "(",
+                    Choice(0, Skip(), OneOrMore("label-string",",")), ")").addTo();
+        </script>
+    </section>
+
+    <section id="with">
+        <h1>with</h1>
+        <script>
+            Diagram(".with", Choice(0, Sequence("(", ")", NonTerminal("compass")),
+                                       Sequence("(",
+                                                NonTerminal("expr"), ",",
+                                                NonTerminal("expr"), ")")),
+                    Choice(0,Skip(),OneOrMore(NonTerminal("attr")))).addTo();
+        </script>
+    </section>
+
+    <section id="at">
+        <h1>at</h1>
+        <script>
+            Diagram(".at", "(",
+                    NonTerminal("reference"),
+                    ")",
+                    Choice(0,Skip(), NonTerminal("index")),
+                    Choice(0, Skip(), NonTerminal("compass")),
+                    Choice(0, Skip(), OneOrMore(NonTerminal("adjustment"))),
+                    Choice(0, Skip(), OneOrMore(NonTerminal("attr")))).addTo();
+        </script>
+    </section>
+
+
+    <section id="from">
+        <h1>from</h1>
+        <script>
+            Diagram(".from", "(",
+                    NonTerminal("reference"),
+                    ")",
+                    Choice(0, Skip(), NonTerminal("index")),
+                    Choice(0, Skip(), NonTerminal("compass")),
+                    Choice(0, Skip(), OneOrMore(NonTerminal("adjustment"))),
+                    Choice(0, Skip(), OneOrMore(NonTerminal("attr")))).addTo();
+        </script>
+    </section>
+    <section id="to">
+        <h1>to</h1>
+        <script>
+            Diagram(".to", "(",
+                    NonTerminal("reference"),
+                    ")",
+                    Choice(0,Skip(), NonTerminal("index")),
+                    Choice(0,Skip(), NonTerminal("compass")),
+                    Choice(0,Skip(), OneOrMore(NonTerminal("adjustment"))),
+                    Choice(0,Skip(), OneOrMore(NonTerminal("attr")))).addTo();
+        </script>
+    </section>
+
+    <section id="reference">
+        <h1>reference</h1>
+        <script>
+            Diagram(Choice(0,"label-string", "javascript-expr")).addTo();
+        </script>
+    </section>
+
+    <section id="index">
+        <h1>index</h1>
+        <script>
+            Diagram(Choice(1, ".index", ".last", ".first", "nth"),
+                    "(", NonTerminal("expr"),
+                     Choice(0,Skip(),
+                            Sequence(",", Choice(3,
+                                                 '"move"', '"box"',
+                                                 '"circle"', '"ellipse"',
+                                                 '"line"', '"arrow"',
+                                                 '"text"', '"group"'))), ")").addTo();
+        </script>
+    </section>
+
+    <section id="compass">
+        <h1>compass</h1>
+        <script>
+            Diagram(Choice(3,
+                           Choice(1, ".east", ".e", ".end", ".right"),
+                           Choice(1, ".west", ".w", ".left"),
+                           Choice(1, ".north", ".n", ".top", ".t"),
+                           Choice(2, ".south", ".s", ".bottom", ".b", ".begin"),
+                           Choice(0, ".c", ".center"),
+                           Choice(0, ".ne", ".northeast"),                
+                           Choice(0, ".se", ".southeast"),
+                           Choice(0, ".nw", ".northwest"),
+                           Choice(0, ".sw", ".southwest")), "(",")").addTo();
+        </script>
+    </section>
+
+    <section id="adjustment">
+        <h1>adjustment</h1>
+        <script>
+            Diagram(Choice(0,
+                           Sequence(Choice(1, ".plus", ".minus"), "(",
+                                    NonTerminal("expr"), ",",
+                                    NonTerminal("expr"), ")"),
+                           Sequence(".percent", "(",
+                                    NonTerminal("expr"), ")",
+                                    NonTerminal("compass")),
+                           Sequence(".swapxy", "(", ")"))).addTo();
+        </script>
+    </section>
+
+    <section id="attr_name">
+        <h1>attr-name</h1>
+        <script>
+            Diagram('"string"').addTo();
+        </script>
+    </section>
+
+    <section id="attr_value">
+        <h1>attr-value</h1>
+        <script>
+            Diagram("JSON-object").addTo();
+        </script>
+    </section>
+
+    <section id="attr_JSON_object">
+        <h1>attr-JSON-object</h1>
+        <script>
+            Diagram("JSON-object").addTo();
+        </script>
+    </section>
+
+</body>
+
+</html>
