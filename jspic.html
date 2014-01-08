@@ -27,15 +27,28 @@
             Diagram(Choice(0, "javascript var", NonTerminal("group")),
                     OneOrMore(Choice(0,
                                      Sequence(Choice(0,
-                                                     Sequence(".max", "(", ".min",
-                                                     ".size", ".scale", ".render")),
-                                              "(",
-                                              Choice(0,Skip(),
-                                                     Sequence(Choice(0, "height", "x-scale"), ",",
-                                                              Choice(0, "width", "y-scale")),
-                                                    "xy-size", "xy-scale"), ")")
-                                     ))
-                   ).addTo();
+                                                     Sequence(Choice(0,
+                                                                     ".max",
+                                                                     ".min",
+                                                                     ".size"),
+                                                              "(",
+                                                              Choice(0,
+                                                                     "size",
+                                                                     Sequence("height",
+                                                                              ",",
+                                                                              "width")), ")"),
+                                                     Sequence(".scale",
+                                                              "(",
+                                                              Choice(0,
+                                                                     "scale",
+                                                                     Sequence("x-scale",
+                                                                              ",",
+                                                                              "y-scale")), ")")
+                                                    )
+                                             )
+                                    )
+                             ),
+                    Sequence(".render", "(", ")")).addTo();
         </script>
     </section>
 
